@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/xvbnm48/go-microservice-udemy/service"
 )
 
@@ -44,4 +45,22 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 		json.NewEncoder(w).Encode(customers)
 
 	}
+}
+
+func (ch *CustomerHandlers) getCustomers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["customer_id"]
+
+	customer, err := ch.service.GetCustomer(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err)
+		fmt.Println("error when get customer")
+		return
+	} else {
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(customer)
+	}
+
 }
