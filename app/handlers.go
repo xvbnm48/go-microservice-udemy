@@ -5,6 +5,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+
+	"github.com/xvbnm48/go-microservice-udemy/service"
 )
 
 type Customer struct {
@@ -13,12 +15,16 @@ type Customer struct {
 	Zipcode string `json:"zip_code" xml:"zip_code"`
 }
 
+type CustomerHandlers struct {
+	service service.CustomerService
+}
+
 func greet(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "hello world")
 
 }
 
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
 	customers := []Customer{
 		{
 			Name: "nabila gusmarlia", City: "indonesia", Zipcode: "112929",
