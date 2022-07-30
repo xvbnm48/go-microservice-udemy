@@ -1,1 +1,0 @@
-git remote add origin https://xvbnm48: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@github.com/xvbnm48/go-microservice-udemy.git 
