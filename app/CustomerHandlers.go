@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"net/http"
 
@@ -10,11 +9,11 @@ import (
 	"github.com/xvbnm48/go-microservice-udemy/service"
 )
 
-type Customer struct {
-	Name    string `json:"name" xml:"name"`
-	City    string `json:"city" xml:"city"`
-	Zipcode string `json:"zip_code" xml:"zip_code"`
-}
+// type Customer struct {
+// 	Name    string `json:"name" xml:"name"`
+// 	City    string `json:"city" xml:"city"`
+// 	Zipcode string `json:"zip_code" xml:"zip_code"`
+// }
 
 type CustomerHandlers struct {
 	service service.CustomerService
@@ -26,24 +25,12 @@ func greet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{
-			Name: "nabila gusmarlia", City: "indonesia", Zipcode: "112929",
-		},
-		{
-			Name: "Sakura Endo", City: "Japan", Zipcode: "48484848",
-		},
-	}
-
-	if r.Header.Get("Content-Type") == "application/xml" {
-		w.Header().Add("Content-Type", "application/xml")
-		// json.NewEncoder(w).Encode(customers)
-		xml.NewEncoder(w).Encode(customers)
-
+	status := r.URL.Query().Get("status")
+	customers, err := ch.service.GetAllCustomer(status)
+	if err != nil {
+		writeResponse(w, err.Code, err.AsMessage())
 	} else {
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(customers)
-
+		writeResponse(w, http.StatusOK, customers)
 	}
 }
 

@@ -13,24 +13,30 @@ type CustomerRepositoryDb struct {
 	client *sql.DB
 }
 
-func (d CustomerRepositoryDb) FindAll() ([]Customer, error) {
+func (d CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError) {
+	var rows *sql.Rows
+	var err error
 
-	findAllSql := "select customer_id, name , city, zipcode, date_of_birth, status  from customers"
-
-	rows, err := d.client.Query(findAllSql)
+	if status == "" {
+		findAllSql := "select customer_id, name , city, zipcode, date_of_birth, status  from customers"
+		rows, err = d.client.Query(findAllSql)
+	} else {
+		findAllSql := "select customer_id, name , city, zipcode, date_of_birth, status from customers where status = ?"
+		rows, err = d.client.Query(findAllSql, status)
+	}
 
 	if err != nil {
 		log.Println("Error while querying customer table " + err.Error())
-		return nil, err
+		return nil, errs.NewUnexpectedError("unexpected database error")
 	}
 
 	customers := make([]Customer, 0)
 	for rows.Next() {
 		var c Customer
-		err = rows.Scan(&c.Id, &c.Name, &c.City, &c.ZipCode, &c.Status)
+		err = rows.Scan(&c.Id, &c.Name, &c.City, &c.ZipCode, &c.DateofBitrh, &c.Status)
 		if err != nil {
 			log.Println("Error while scanning customer" + err.Error())
-			return nil, err
+			return nil, errs.NewUnexpectedError("unexpected database error")
 		}
 		customers = append(customers, c)
 	}
