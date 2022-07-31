@@ -47,14 +47,14 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (ch *CustomerHandlers) getCustomers(w http.ResponseWriter, r *http.Request) {
+func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["customer_id"]
 
 	customer, err := ch.service.GetCustomer(id)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
+		w.WriteHeader(err.Code)
+		fmt.Fprint(w, err.Message)
 		fmt.Println("error when get customer")
 		return
 	} else {
