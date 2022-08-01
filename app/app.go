@@ -13,7 +13,6 @@ import (
 func Start() {
 	//	mux := http.NewServeMux()
 	router := mux.NewRouter()
-	fmt.Println("Starting server on port 8080")
 
 	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb())}
 
