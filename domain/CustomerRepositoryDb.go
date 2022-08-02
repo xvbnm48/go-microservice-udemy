@@ -5,6 +5,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"github.com/xvbnm48/go-microservice-udemy/errs"
 	"github.com/xvbnm48/go-microservice-udemy/logger"
 )
@@ -31,15 +32,12 @@ func (d CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError
 	}
 
 	customers := make([]Customer, 0)
-	for rows.Next() {
-		var c Customer
-		err = rows.Scan(&c.Id, &c.Name, &c.City, &c.ZipCode, &c.DateofBitrh, &c.Status)
-		if err != nil {
-			logger.Error("Error while scanning customer" + err.Error())
-			return nil, errs.NewUnexpectedError("unexpected database error")
-		}
-		customers = append(customers, c)
+	err = sqlx.StructScan(rows, &customers)
+	if err != nil {
+		logger.Error("Error while scanning customer table " + err.Error())
+		return nil, errs.NewUnexpectedError("unexpected database error")
 	}
+
 	return customers, nil
 
 }

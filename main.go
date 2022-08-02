@@ -7,6 +7,6 @@ import (
 
 func main() {
 	// log.Println("Starting the application...")
-	logger.Info("Starting the application...")
+	logger.Info("Starting the application at port 8080")
 	app.Start()
 }
