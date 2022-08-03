@@ -34,7 +34,7 @@ func (d CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError
 	customers := make([]Customer, 0)
 	err = sqlx.StructScan(rows, &customers)
 	if err != nil {
-		logger.Error("Error while scanning customer table " + err.Error())
+		logger.Error("Error while scanning customer table database " + err.Error())
 		return nil, errs.NewUnexpectedError("unexpected database error")
 	}
 
