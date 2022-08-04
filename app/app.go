@@ -11,8 +11,15 @@ import (
 	"github.com/xvbnm48/go-microservice-udemy/service"
 )
 
+func sanityCheck() {
+	if os.Getenv("SERVER_ADDRESS") == "" || os.Getenv("SERVER_PORT") == "" {
+		log.Fatal("Environment variable not defined")
+	}
+}
+
 func Start() {
 	//	mux := http.NewServeMux()
+	sanityCheck()
 	router := mux.NewRouter()
 
 	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb())}
