@@ -39,7 +39,7 @@ func (s DefaultAccountService) NewAccount(req dto.NewAccountRequest) (*dto.NewAc
 }
 
 func (s DefaultAccountService) MakeTRansaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
-
+	return nil, nil
 }
 
 func NewAccountService(repo domain.AccountRepository) DefaultAccountService {
