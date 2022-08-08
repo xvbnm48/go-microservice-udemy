@@ -51,7 +51,7 @@ func (h AccountHandler) MakeTransaction(w http.ResponseWriter, r *http.Request) 
 		request.AccountId = customerId
 
 		// make transaction
-		account, appError := h.service.MakeTRansaction(request)
+		account, appError := h.service.MakeTansaction(request)
 		if appError != nil {
 			writeResponse(w, appError.Code, appError.AsMessage())
 			return
