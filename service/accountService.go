@@ -8,8 +8,11 @@ import (
 	"github.com/xvbnm48/go-microservice-udemy/errs"
 )
 
+const dbTSLayout = "2006-01-02 15:04:05"
+
 type AccountService interface {
 	NewAccount(dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError)
+	MakeTansaction(req dto.TransactionRequest) (*dto.TransactionRequest, *errs.AppError)
 }
 
 type DefaultAccountService struct {
@@ -38,8 +41,32 @@ func (s DefaultAccountService) NewAccount(req dto.NewAccountRequest) (*dto.NewAc
 	return &response, nil
 }
 
-func (s DefaultAccountService) MakeTRansaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
-	return nil, nil
+func (s DefaultAccountService) MakeTansaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
+	// incoming request validation
+	if err := req.Validate(); err != nil {
+		account, err := s.repo.FindBy(req.AccountId)
+		if err != nil {
+			return nil, err
+		}
+		if !account.CanWithdraw(req.Amount) {
+			return nil, errs.NewValidationError("insufficient balance in the account")
+		}
+	}
+
+	// if all is well, build the domain object, and save the transaction
+	t := domain.Transaction{
+		AccountId:       req.AccountId,
+		Amount:          req.Amount,
+		TransactionType: req.TransactionType,
+		TransactionDate: time.Now().Format(dbTSLayout),
+	}
+	transaction, appError := s.repo.SaveTransaction(t)
+	if appError != nil {
+		return nil, appError
+	}
+
+	response := transaction.ToDto()
+	return &response, nil
 }
 
 func NewAccountService(repo domain.AccountRepository) DefaultAccountService {
