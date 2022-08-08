@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/xvbnm48/go-microservice-udemy/dto"
+
 const WITHDRAWAL = "withdrawal"
 
 type Transaction struct {
@@ -15,4 +17,14 @@ func (t Transaction) IsWithdrawal() bool {
 		return true
 	}
 	return false
+}
+
+func (t Transaction) ToDto() dto.TransactionResponse {
+	return dto.TransactionResponse{
+		TransactionId:   t.TransactionId,
+		AccountId:       t.AccountId,
+		Amount:          t.Amount,
+		TransactionType: t.TransactionType,
+		TransactionDate: t.TransactionDate,
+	}
 }
