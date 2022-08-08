@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/xvbnm48/go-microservice-udemy/errs"
+
 const WITHDRAWAL = "withdrawal"
 const DEPOSIT = "deposit"
 
@@ -17,4 +19,24 @@ func (r TransactionRequest) IsTransactionTypeWithdrawal() bool {
 
 func (r TransactionRequest) IsTransactionTypeDeposit() bool {
 	return r.TransactionType == DEPOSIT
+}
+
+func (r TransactionRequest) Validate() *errs.AppError {
+	if !r.IsTransactionTypeWithdrawal() && !r.IsTransactionTypeDeposit() {
+		return errs.NewValidationError("Transaction type must be either withdrawal or deposit")
+	}
+
+	if r.Amount < 0 {
+		return errs.NewValidationError("Amount cannot be less than zero")
+	}
+
+	return nil
+}
+
+type TransactionResponse struct {
+	TransactionId   string  `json:"transaction_id"`
+	AccountId       string  `json:"account_id"`
+	Amount          float64 `json:"amount"`
+	TransactionType string  `json:"transaction_type"`
+	TransactionDate string  `json:"transaction_date"`
 }
