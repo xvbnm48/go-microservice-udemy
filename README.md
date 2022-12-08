@@ -18,3 +18,5 @@ SERVER_ADDRESS=localhost SERVER_PORT=8080 DB_USER=root DB_PASSWD= DB_ADDR=localh
 // func createCustomer(w http.ResponseWriter, r *http.Request) {
 // 	fmt.Fprint(w, "post request received")
 // }
+
+ini dari laptop kantor
