@@ -1,4 +1,4 @@
-# go-microservice-udemy!!!!
+# go-microservice-udemy
 go microservice chapter 15 10.29
 link to course [udemy](https://www.udemy.com/course/building-modern-web-applications-with-go/learn/lecture/22875035?start=0#overview)
 
@@ -20,3 +20,6 @@ SERVER_ADDRESS=localhost SERVER_PORT=8080 DB_USER=root DB_PASSWD= DB_ADDR=localh
 // }
 
 ini dari laptop kantor
+
+
+sekarang gua pakai microservice dengan bantuan dari grpc dan go-kit
