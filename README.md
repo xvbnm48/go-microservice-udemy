@@ -23,3 +23,5 @@ ini dari laptop kantor
 
 
 sekarang gua pakai microservice dengan bantuan dari grpc dan go-kit
+
+microservice with go-kit
